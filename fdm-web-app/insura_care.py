@@ -17,12 +17,12 @@ import requests
 
 
 
-# LOGO_URL_LARGE= "C:/Users/Azri/fdm-project/fdm-web-app/logo.png"
+LOGO_URL_LARGE= "https://github.com/Azri-Muhsin/FDM-mini-project-y3s1/blob/main/fdm-web-app/logo.png"
 
 
-# st.image(
-#             LOGO_URL_LARGE , width=800
-#         )
+st.image(
+            LOGO_URL_LARGE , width=800
+        )
 st.write(""" 
         
          ### classify customers at a *crash risk* and predict *premium coverage* estimate 
