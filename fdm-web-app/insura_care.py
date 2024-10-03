@@ -212,9 +212,6 @@ df_raw = pd.read_csv('normalized_data')
 df_dropped = df_raw.drop(columns=['Unnamed: 0', 'CLAIM_FLAG', 'CLM_AMT'])
 df = pd.concat([input_df, df_dropped] , axis=0)
 
-# st.write(df)
-
-
 
 binary_encode_cols = {
     'MSTATUS': {'Married': 1, 'Unmarried': 0},
@@ -226,25 +223,13 @@ binary_encode_cols = {
 for col, mapping in binary_encode_cols.items():
     df[col] = df[col].replace(mapping)
 
-# st.write("Unscaled but has the answer row")
 
-# st.write(df)
 scaler = MinMaxScaler()
 
-# st.write("Scaled with the answer row")
 
 df_mm_scaled = (df-df.min())/(df.max()-df.min())
 
-# st.write(df_mm_scaled)
-
-# st.write("min max sclaed dataframe but no answer")
-# df_new_scaled = pd.read_csv('min_max_scaled')
-# df_new_dropped = df_new_scaled.drop(columns=['Unnamed: 0', 'CLAIM_FLAG', 'CLM_AMT'])
-# st.write(df_new_dropped)
-
 df_mm_scaled = df_mm_scaled.iloc[:1]
-
-
 
 
 
@@ -297,7 +282,7 @@ if crash_likeliness == 1:
             """,predicted_claim)
 else:
     st.write("""
-                #### :green[Not a Crash Risk] ✅
+                #### :green[No claim risk] ✅
             """)
     
     
