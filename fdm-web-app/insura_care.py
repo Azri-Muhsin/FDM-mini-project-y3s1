@@ -32,7 +32,7 @@ st.write("""
 #####################################################################################################################################################################
 #DECISON TREE MODEL BUILDING#
 
-dframe = pd.read_csv("./normalized_data")
+dframe = pd.read_csv("https://raw.githubusercontent.com/Azri-Muhsin/FDM-mini-project-y3s1/refs/heads/main/fdm-web-app/normalized_data")
 
 dframe = dframe[dframe['CLAIM_FLAG'] == 1]
 
@@ -204,7 +204,7 @@ else:
 #*********************************************************************************************************************************************************
 #ENCODING INPUT VALUES#
 
-df_raw = pd.read_csv('./normalized_data')
+df_raw = pd.read_csv('https://raw.githubusercontent.com/Azri-Muhsin/FDM-mini-project-y3s1/refs/heads/main/fdm-web-app/normalized_data')
 df_dropped = df_raw.drop(columns=['Unnamed: 0', 'CLAIM_FLAG', 'CLM_AMT'])
 df = pd.concat([input_df, df_dropped] , axis=0)
 
@@ -258,7 +258,7 @@ st.write(crash_likeliness)
 if crash_likeliness == 1:
 
 
-    dframe = pd.read_csv('./normalized_data')
+    dframe = pd.read_csv('https://raw.githubusercontent.com/Azri-Muhsin/FDM-mini-project-y3s1/refs/heads/main/fdm-web-app/normalized_data')
     dframe = dframe[dframe['CLAIM_FLAG'] == 1]
     dframe = dframe.drop(columns=['Unnamed: 0', 'CLAIM_FLAG', 'CLM_AMT'])
     dframe = pd.concat([input_df, dframe] , axis=0)
