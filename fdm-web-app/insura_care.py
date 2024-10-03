@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 import pickle 
-from sklearn.naive_bayes import GaussianNB
+
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeRegressor
