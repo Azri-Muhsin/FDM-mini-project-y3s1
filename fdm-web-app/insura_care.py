@@ -16,14 +16,14 @@ from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
 
 
-LOGO_URL_LARGE= "C:/Users/Azri/fdm-project/fdm-web-app/logo.png"
+# LOGO_URL_LARGE= "C:/Users/Azri/fdm-project/fdm-web-app/logo.png"
 
 
-st.image(
-            LOGO_URL_LARGE , width=800
-        )
+# st.image(
+#             LOGO_URL_LARGE , width=800
+#         )
 
-st.write(""" 
+# st.write(""" 
         
          ### classify customers at a *crash risk* and predict *premium coverage* estimate 
           
