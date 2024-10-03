@@ -240,16 +240,19 @@ else:
     st.write('Awaiting CSV file to be uploaded using example input parameters')
     st.write(df_mm_scaled)
 
-import pickle
+
 
 # URL of the pickle file
 url = "https://github.com/Azri-Muhsin/FDM-mini-project-y3s1/blob/main/fdm-web-app/gaussian.pkl?raw=true"
 
 # Download the file
 response = requests.get(url)
+with open('gaussian.pkl', 'wb') as file:
+    file.write(response.content)
 
-
-loaded_classifier_model = pickle.load(open('gaussian.pkl', 'wb').write(response.content))
+# Load the pickle file
+with open('gaussian.pkl', 'rb') as file:
+    loaded_classifier_model = pickle.load(file)
 crash_likeliness = loaded_classifier_model.predict(df_mm_scaled)
 
 claim_probability = loaded_classifier_model.predict_proba(df_mm_scaled)
