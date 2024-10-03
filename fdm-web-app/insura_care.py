@@ -22,13 +22,12 @@ from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 # st.image(
 #             LOGO_URL_LARGE , width=800
 #         )
-
- st.write(""" 
+st.write(""" 
         
          ### classify customers at a *crash risk* and predict *premium coverage* estimate 
           
 
-          """)
+         """)
 
 #####################################################################################################################################################################
 #DECISON TREE MODEL BUILDING#
