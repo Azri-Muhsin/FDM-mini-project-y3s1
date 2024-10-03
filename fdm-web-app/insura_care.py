@@ -17,7 +17,7 @@ import requests
 
 
 
-LOGO_URL_LARGE= "https://github.com/Azri-Muhsin/FDM-mini-project-y3s1/blob/main/fdm-web-app/logo.png"
+LOGO_URL_LARGE= "https://raw.githubusercontent.com/Azri-Muhsin/FDM-mini-project-y3s1/blob/main/fdm-web-app/logo.png"
 
 
 st.image(
