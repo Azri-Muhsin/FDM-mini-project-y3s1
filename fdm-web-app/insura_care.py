@@ -27,10 +27,7 @@ from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
         
          ### classify customers at a *crash risk* and predict *premium coverage* estimate 
           
-         Project GitHub link [Take me to the Repo](http://www.github.com)\n
-         Project Dataset link [Take me to the data source](http://www.kaggle.com)\n
-         Project Explainer Vid: [![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](http://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE)
- 
+
           """)
 
 #####################################################################################################################################################################
