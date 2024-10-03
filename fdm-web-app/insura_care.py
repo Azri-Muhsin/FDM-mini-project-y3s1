@@ -241,7 +241,7 @@ else:
 
 
 
-loaded_classifier_model = pickle.load(open("gaussian.pkl", "rb"))
+loaded_classifier_model = pickle.load(open("https://github.com/Azri-Muhsin/FDM-mini-project-y3s1/blob/main/fdm-web-app/gaussian.pkl", "rb"))
 crash_likeliness = loaded_classifier_model.predict(df_mm_scaled)
 
 claim_probability = loaded_classifier_model.predict_proba(df_mm_scaled)
