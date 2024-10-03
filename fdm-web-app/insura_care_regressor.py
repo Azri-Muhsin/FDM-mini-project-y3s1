@@ -1,10 +1,6 @@
-
 import pandas as pd
 import numpy as np
 import streamlit as st
-import pickle 
-from sklearn.naive_bayes import GaussianNB
-from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score,f1_score
@@ -12,10 +8,28 @@ from sklearn.metrics import mean_absolute_error as mae
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
 
+##################################################################################################################################################################################################################
+df = pd.read_csv("normalized_data")
+
+df = df[df['CLAIM_FLAG'] == 1]
+
+df = df.drop(columns=[ 'Unnamed: 0'])
+
+x = df.drop(columns=['CLM_AMT'])  
+y = df['CLM_AMT']
+
+y_log= np.log1p(y)
+
+x_train, x_test, y_train, y_test = train_test_split(x, y_log, test_size=0.3, random_state=42)
+
+basic_tree = DecisionTreeRegressor(random_state=42, max_depth=5)
+
+basic_tree.fit(x_train, y_train)
+
+y_pred = basic_tree.predict(x_test)
 
 
-
-
+################################################################################################
 LOGO_URL_LARGE= "C:/Users/Azri/fdm-project/fdm-web-app/logo.png"
 
 
@@ -33,30 +47,7 @@ st.write("""
  
           """)
 
-#####################################################################################################################################################################
-#DECISON TREE MODEL BUILDING#
 
-dframe = pd.read_csv("normalized_data")
-
-dframe = dframe[dframe['CLAIM_FLAG'] == 1]
-
-dframe = dframe.drop(columns=[ 'Unnamed: 0', 'CLAIM_FLAG'])
-
-x = dframe.drop(columns=['CLM_AMT'])  
-y = dframe['CLM_AMT']
-
-y_log= np.log1p(y)
-
-x_train, x_test, y_train, y_test = train_test_split(x, y_log, test_size=0.3, random_state=42)
-
-basic_tree = DecisionTreeRegressor(random_state=42, max_depth=5)
-
-basic_tree.fit(x_train, y_train)
-
-# y_pred = basic_tree.predict(x_test)
-
-
-#####################################################################################################################################################################
 
 
 #********************************************************************************************************************************************************
@@ -196,7 +187,8 @@ else:
             'CAR_TYPE_Van': CAR_TYPE_Van,
             'CAR_TYPE_z_SUV': CAR_TYPE_SUV,
             'URBANICITY_Highly Urban/ Urban': URBANICITY_Urban,
-            'URBANICITY_z_Highly Rural/ Rural': URBANICITY_Rural
+            'URBANICITY_z_Highly Rural/ Rural': URBANICITY_Rural,
+            'CLAIM_FLAG': 1
             
         }
     
@@ -209,10 +201,9 @@ else:
 #ENCODING INPUT VALUES#
 
 df_raw = pd.read_csv('normalized_data')
-df_dropped = df_raw.drop(columns=['Unnamed: 0', 'CLAIM_FLAG', 'CLM_AMT'])
-df = pd.concat([input_df, df_dropped] , axis=0)
-
-# st.write(df)
+df_dropped = df_raw.drop(columns=['Unnamed: 0', 'CLM_AMT'])
+df_dropped = df_dropped[df_dropped['CLAIM_FLAG'] == 1]
+df_pred = pd.concat([input_df, df_dropped] , axis=0)
 
 
 
@@ -224,80 +215,58 @@ binary_encode_cols = {
 }
 
 for col, mapping in binary_encode_cols.items():
-    df[col] = df[col].replace(mapping)
-
-# st.write("Unscaled but has the answer row")
-
-# st.write(df)
-scaler = MinMaxScaler()
-
-# st.write("Scaled with the answer row")
-
-df_mm_scaled = (df-df.min())/(df.max()-df.min())
-
-# st.write(df_mm_scaled)
-
-# st.write("min max sclaed dataframe but no answer")
-# df_new_scaled = pd.read_csv('min_max_scaled')
-# df_new_dropped = df_new_scaled.drop(columns=['Unnamed: 0', 'CLAIM_FLAG', 'CLM_AMT'])
-# st.write(df_new_dropped)
-
-df_mm_scaled = df_mm_scaled.iloc[:1]
+    df_pred[col] = df_pred[col].replace(mapping)
 
 
 
 
+df_pred = df_pred.iloc[:1]
 
-#************************************************************************************************************************************************
-# Display the features input by the user
+
+
 st.subheader('User Input features')
 
 if uploaded_csv is not None:
-    st.write(df_mm_scaled)
+    st.write(df_pred)
 else:
     st.write('Awaiting CSV file to be uploaded using example input parameters')
-    st.write(df_mm_scaled)
+    st.write(df_pred)
 
 
 
-loaded_classifier_model = pickle.load(open("gaussian.pkl", "rb"))
-crash_likeliness = loaded_classifier_model.predict(df_mm_scaled)
-
-claim_probability = loaded_classifier_model.predict_proba(df_mm_scaled)
+predicted_claim = basic_tree.predict(df_pred)
 
 
+st.write("""
+
+        ## Expected Claim:
+        
+        """, predicted_claim)
+################################################################################################
 
 
-st.subheader('Prediction')
+dlmse = mean_squared_error(y_test, y_pred)
+dlmae = mean_absolute_error(y_test, y_pred)
+dlr2 = r2_score(y_test, y_pred)
 
-st.write(crash_likeliness)
+st.write(f"Mean Squared Error (MSE): {dlmse:.2f}")
+st.write(f"Mean Absolute Error (MAE): {dlmae:.2f}")
+st.write(f"R-squared (R2): {dlr2:.2f}")
 
 
+# Convert predicted log values back to original scale
+y_pred_original = np.exp(y_pred)
 
-if crash_likeliness == 1:
+# Convert actual log values back to original scale
+y_test_original = np.exp(y_test)
 
 
-    dframe = pd.read_csv('normalized_data')
-    dframe = dframe[dframe['CLAIM_FLAG'] == 1]
-    dframe = dframe.drop(columns=['Unnamed: 0', 'CLAIM_FLAG', 'CLM_AMT'])
-    dframe = pd.concat([input_df, dframe] , axis=0)
-    dframe = dframe.iloc[:1]
+dmse = mean_squared_error(y_test_original, y_pred_original)
+dmae = mean_absolute_error(y_test_original, y_pred_original)
+dr2 = r2_score(y_test_original, y_pred_original)
 
-    predicted_claim = basic_tree.predict(dframe)
+st.write(f"Mean Squared Error (MSE): {dmse:.2f}")
+st.write(f"Mean Absolute Error (MAE): {dmae:.2f}")
+st.write(f"R-squared (R2): {dr2:.2f}")
 
-    predicted_claim = np.exp(predicted_claim)
-    st.write("""
-                ##### :red[Claim Likely]🚩
-            """)
-    st.write("""
-                ##### Confidence:
-            """,claim_probability)
-    st.write("""
-                ### Predicted Claim Amount: $
-            """,predicted_claim)
-else:
-    st.write("""
-                #### :green[Not a Crash Risk] ✅
-            """)
-    
-    
+##################################################################################################################################################################################################################
